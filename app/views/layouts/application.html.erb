@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      <title>AggiesOffTheRails</title>
+      <%= csrf_meta_tags %>
+      <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+      <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    
+      <div class="page-header">
+        <h1 class="page-banner"><%= link_to 'CSNET 2.0', root_path,:id => "banner_style" %>
+            <small></small>
+        </h1>
+      </div> 
+ </head>
+ 
+  <body>
+      <%= render 'layouts/flash_messages' %>
+</div>
+      <%= yield %>
+        <button class="hamburger">&#9776;</button>
+        <button class="cross">&#735;</button>
+        <div class="menu">
+          <ul>
+            <li> <%= link_to('Home', root_path, :method => :get) %> </li> 
+
+            <% if @isInstructor %>
+              <li><%= link_to "Change Password", edit_instructor_registration_path %></li>
+            <% end %>
+
+            <% if @isStudent %>
+              <li><%= link_to "Change Password", edit_student_registration_path %></li>
+          <% end %>
+
+            <% if @isAssistant %>
+              <li><%= link_to "Change Password", edit_assistant_registration_path %></li>
+          <% end %>
+          
+            <li><%= link_to('Logout', destroy_instructor_session_path, :method => :delete) %> </li>
+          </ul>
+        </div> 
+   </body>
+   
+   <!-- Might not be good practice to do this but having this in the js file makes it lag behind. -->
+   <script>
+        $( ".cross" ).hide();
+        $( ".menu" ).hide();
+        
+        $( ".hamburger" ).click(function() {
+            $( ".menu" ).slideToggle( "fast", function() {
+                $( ".hamburger" ).hide();
+                $( ".cross" ).show();
+            });
+        });
+        
+        $( ".cross" ).click(function() {
+            $( ".menu" ).slideToggle( "fast", function() {
+                $( ".cross" ).hide();
+                $( ".hamburger" ).show();
+            });
+        });
+        
+   </script>
+   
+  </div>
+</html>

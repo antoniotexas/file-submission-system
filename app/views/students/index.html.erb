@@ -1,0 +1,116 @@
+<div style="text-align:center;">
+    <h1> <b>Students </b></h1>
+</div>
+
+<div class="container">
+  <div class="row", style="text-align: center">
+    <button type="button" class="btn btn-primary studentButton" data-toggle="collapse" data-target="#student-create-content">Add a Student</button>
+  </div>
+  <div id="student-create-content", class= "collapse">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="form">
+          <%= form_for :student, url: students_path do |f| %>
+            <p>
+              <%= f.label :first_name %>
+              <%= f.text_field :first_name, id:"f_name", class: 'form-control',:required => true%>
+            </p>
+          
+            <p>
+              <%= f.label :last_name %>
+              <%= f.text_field :last_name, id:"l_name", class: 'form-control',:required => true%>
+            </p>
+  
+            <p>
+              <%= f.label :email %>
+              <%= f.text_field :email, id:"email", class: 'form-control',:required => true%>
+            </p>
+  
+            <p>
+              <%= f.label :course_num %><br>
+             <%= f.collection_select :course_num, @courses.select(:number).distinct, :number, :number, { prompt: "Select a Course Number"}, {id:"course_num", class: "form-control", :required => true} %>
+            </p>
+            
+            <p>
+              <%= f.label :course_year %><br>
+             <%= f.collection_select :course_year, @courses.select(:year).distinct, :year, :year,{  prompt: "Select the year of the course"}, {id:"course_year", class: "form-control", :required => true} %>
+            </p>
+            
+            <p>  
+              <%= f.label :course_session %><br>
+              <%= f.collection_select :course_session, Course.getSessions, :strip, :strip,{  name:"course_session", prompt: "Select a semester"}, {id:"course_session", class: "form-control", :required => true} %>
+            </p>
+  
+            <p>
+              <%= f.submit 'Submit', :id=>"submit", class: "btn btn-primary" %>
+            </p>
+            
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="container">
+  <div class="row", style="text-align: center">
+    <button type="button" class="btn btn-primary studentButton" data-toggle="collapse" data-target="#student-roster-content">Import a Roster</button>
+  </div>
+    <div id="student-roster-content", class= "collapse">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="form">
+          <%= form_for :roster, html: { multipart: true }, url: rosters_path do |f| %>
+
+              <%= f.label :course_number %>
+              <%= f.collection_select :course_num, @courses.select(:number).distinct, :number, :number, { prompt: "Select a Course Number"}, {id:"course_num", class: "form-control", :required => true} %>
+
+              <%= f.label :course_year %>
+              <%= f.collection_select :course_year, @courses.select(:year).distinct, :year, :year,{  prompt: "Select the year of the course"}, {id:"course_year", class: "form-control", :required => true} %>
+
+              <%= f.label :course_session %>
+              <%= f.collection_select :course_session, Course.getSessions, :strip, :strip,{  prompt: "Select a semester"}, {id:"course_session", class: "form-control", :required => true} %>
+
+              <%= f.label :attachment %>
+              <%= f.file_field :attachment, id:"roster", class: 'form-control', :required => true %>
+              <%= f.submit "Import Roster", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<div id="subm-show-content">
+  <table style = "width: 80%">
+    <thead >
+      <tr>
+        <th>Course Name</th>
+        <th>Student Name</th>
+        <th>Student Email</th>
+      </tr>
+    </thead>
+       
+           <% @courses.each do |course| %>
+              <tr id = "row_color">
+               <td class = "row_border" id="course_name_num"><%= course.name + (" ") + course.number.to_s %></td>
+               <td class = "row_border"></td>
+               <td class = "row_border"></td>
+        </tr>
+            <% course.students.each do |c| %>
+              <tr>
+                 <td class = "row_border"></td>
+                 <td id ="align_center" class ="row_border" ><%= c.first_name %> <%= c.last_name %></td>
+                 <td id ="align_center" class ="row_border"><%= c.email %></td>
+              </tr>
+            <% end %>
+         <% end %>
+  </table>
+  <br/> 
+    <div style="text-align:center;">  
+      <%= link_to 'Home', root_path %> 
+    </div>
+  <br/> 
+</div>

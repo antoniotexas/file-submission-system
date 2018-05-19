@@ -1,0 +1,14 @@
+# Add configuration values here, as shown below.
+
+# === YOU SHOULD CHANGE THESE VARIABLES ACCORDING TO YOUR PERSONAL S3 ACCCOUNT.  LOOK FOR "My Security Credentials" under your login first and last name. === #
+# You will mainly be using the access key and the secret access key #
+# The region is hardcoded so just make sure it is consitent. #
+
+AWS_ACCESS_KEY_ID: "AKIAIH3QU7AOY2QLA72Q"
+AWS_SECRET_ACCESS_KEY: "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"
+AWS_ASSET_URL: "https://s3-us-west-2.amazonaws.com"
+development:
+  AWS_BUCKET: "431storage"
+  AWS_DEFAULT_REGION: "us-west-2"
+production:
+  AWS_BUCKET: "431storage"

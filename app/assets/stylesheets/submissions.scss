@@ -1,0 +1,45 @@
+// Place all the styles related to the Submissions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#title_style{
+    text-align:center;
+    font-weight: bold;
+}
+#on_time{
+    color:green;
+}
+
+#not_on_time{
+    color:red;
+}
+
+#course_name_num{
+    font-weight:bold;
+}
+
+
+#remove_border_line{
+    border-bottom: 0;
+}
+
+#subm-show-content {
+
+}
+
+.row_color{
+    background-color:#DCDCDC;
+}
+.row_border{
+    border-color:#000000 #000000;
+    border-width: 1px;
+}
+
+#submission_attachment{
+    text-align:center;
+}
+
+
+#bottom_menu{
+    text-align:center;
+}

@@ -1,0 +1,87 @@
+<div class="course-list-content">
+  <div style="text-align:center;">
+    <h1><b>Courses</b></h1>
+  </div>
+  
+  <% if instructor_signed_in? %>
+    <div class="container">
+      <div class="row", style="text-align: center;">
+      <button type="button" class="btn btn-primary courseButton" data-toggle="collapse" data-target="#course-create-content">Add a Course</button>
+      </div>
+      <div id="course-create-content", class= "collapse">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="form">
+              <%= form_for :course, url: courses_path do |f| %>
+                <p>
+                  <%= f.label :name %>
+                  <%= f.text_field :name, id:"name", class: 'form-control', :required => true%>
+                </p>
+              
+                <p>
+                  <%= f.label :number %>
+                  <%= f.number_field :number, id:"number",class: 'form-control', :required => true%>
+                </p>
+      
+                <p>
+                  <%= f.label :year %>
+                  <%= f.number_field :year, id:"year", class: 'form-control', :required => true%>
+                </p>
+      
+                <p>
+                  <%= f.label :semester %><br>
+                  <%= f.collection_select :session, Course.getSessions, :strip, :strip,{ id:"session", name:"session", prompt: "Select a semester"}, {class: "form-control", :required => true} %>
+                </p>
+      
+                <p>
+                  <%= f.submit 'submit', :id=>"submit", class: "btn btn-primary" %>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  <% end %>
+  
+  
+  <table class = "sortable" data-link="row">
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th><%= sortable "number", "Course" %> </th>
+        <th>Semester</th>
+        <th>Year</th>
+        <% if @isInstructor %>
+          <th>Action</th>
+        <% end %>
+        
+      </tr>
+    </thead>
+   
+   
+    <% @courses.each do |course| %>
+      <tr onclick="location.href='<%= course_path(course) %>'">
+        <td><%= course.name %></td>
+        <td><%= course.number %></td>
+        <td><%= course.session %></td>
+        <td><%= course.year %></td>
+        <% if false %>
+        <td><%= link_to 'Show', course_path(course) %></td>
+        <% end %>
+        
+        <% if @isInstructor %>
+          <td><%= button_to "Delete",  course, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure that you wish to delete #{course.name} #{course.number}?"} %> </td>
+        <% end %>
+
+      </tr>
+    <% end %>
+  </table>
+  
+  <br/> 
+      <div style="text-align:center;">
+          <%= link_to('Home', root_path, :method => :get) %>
+      </div>
+  <br/> 
+</div>

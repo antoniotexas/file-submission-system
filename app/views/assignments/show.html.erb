@@ -1,0 +1,143 @@
+<div id="assign-show-content">
+  
+  <p>
+    <strong>NAME:</strong>
+    <%= @assignment.name %>
+  </p>
+   
+  <p>
+    <strong>COURSE:</strong>
+    <%=  %> <%= @assignment.course.number %>
+  </p>
+  
+  <p>
+    <strong>DUE DATE:</strong>
+    <%= DateTime.parse(@assignment.due_date).strftime("%a, %m/%d/%Y at %I:%M%p") %>
+  </p>
+  
+   <!-- Form for creating a submission-->
+  <% if @isStudent %>
+    <div class="container">
+    <div class="row">
+      <button type="button" class="btn btn-primary col-md-6 col-md-offset-3" data-toggle="collapse" data-target="#submission-content">Submit Assignment</button>
+    </div>
+      <div id="submission-content", class= "collapse">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="form">
+            <%= form_for :submission, url: submissions_path do |f| %>
+              <p>
+                <%= f.label :name %><br>
+                <%= f.text_field :name, id:"name", class: 'form-control', :required => true %>
+              </p>
+            
+              <p>
+                <%= f.label :assignment %><br>
+                <%= f.text_field :assignment, id:"assignment_name", class: 'form-control', :value => @assignment.name %>
+              
+                <%= f.label :course_num %><br>
+                <%= f.text_field :course_num, id:"course_num", class: 'form-control', :value => @assignment.course.number %>
+             
+              </p>
+              
+              <p>
+                <%= f.label :attachment %>
+                <%= f.file_field :attachment, id:"submission", class:"form-control", :required => true%>
+              </p>
+            
+              <p>
+                <%= f.submit 'submit', id:"submit",class: "btn btn-primary" %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  <% end %>
+  
+   <!-- Shows submissions table -->
+  <% if @isStudent %>
+  <div id="subm-show-content">
+  <table style = "width: 80%">
+      <thead>
+        <tr>
+          <th>Due Date</th>
+          <th>Submitted Date</th>
+          <th>Status</th>
+          <th>Submission</th>
+        </tr>
+      </thead>
+    
+       <!-- iterates through assignments and shows the submissions that were submited  -->
+      <% if (@submissions != nil) %>
+        <% @assignment.submissions.each do |submission| %>
+         <% if (submission.student.email == current_student.email  )%>
+          <tr>
+            <td><%= DateTime.parse(@assignment.due_date).strftime("%a, %m/%d/%Y at %I:%M%p") %></td>
+            <td><%= (submission.created_at).strftime("%a, %m/%d/%Y at %I:%M%p") %></td>
+            
+             <% if ( submission.created_at > Time.parse(@assignment.due_date) ) %>
+                <td id="not_on_time">Late</td>
+             <% else %>
+                <td id="on_time">On time</td>
+             <% end %>
+          <td style="text-align:center"><%= link_to truncate(submission.name, :length => 20, :ommission => true), submission.attachment_url -%></td>
+          </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </table>
+  <% end %>
+
+  
+    <h1 style="text-align: center;"> Student Submissions </h1>
+
+      
+  <% if @isInstructor || @isAssistant%>
+  <div id="subm-show-content">
+  <table class = "w">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Student Email</th>
+          <th>Due Date</th>
+          <th>Submitted Date</th>
+          <th>Status</th>
+          <th>Download Submission</th>
+        </tr>
+      </thead>
+     
+     <% if @assignment.submissions.size > 0 %>
+      <% @assignment.submissions.each do |submission| %>
+        <tr>
+          <% if submission.student != nil %>
+              <td><%= submission.student.first_name %> <%= submission.student.last_name %></td>
+              <td><%= submission.student.email %></td>
+          <% end %>
+              <td><%= DateTime.parse(@assignment.due_date).strftime("%a, %m/%d/%Y at %I:%M%p") %></td>
+              <td><%= (submission.created_at).strftime("%a, %m/%d/%Y at %I:%M%p") %></td>
+              <% if ( submission.created_at > Time.parse(@assignment.due_date) ) %>
+                <td id="not_on_time">Late</td>
+              <% else %>
+                <td id="on_time">On time</td>
+              <% end %>
+              <td style="text-align:center"><%= link_to truncate(submission.name, :length => 20, :ommission => true), submission.attachment_url -%></td>
+        </tr>
+        
+      <% end %>
+    <% end %>
+    </table>
+  <% end %>
+  
+  <br> 
+  <div style="text-align:center;">
+    <%= link_to 'Back', assignments_path %> &emsp;
+    <%= link_to 'Home', root_path %> &emsp;
+    <% if @isInstructor %>
+      <%= link_to 'Edit', edit_assignment_path(@assignment) %>
+    <% end %>
+  
+  </div>
+  <br>
+</div>

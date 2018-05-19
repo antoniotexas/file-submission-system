@@ -1,0 +1,57 @@
+// Place all the styles related to the Assignments controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+ 
+
+.w{
+    width: 1000px;
+}
+#assign-list-content {
+    margin-left: 25px;
+}
+
+#assign-create-content {
+    margin-left: 25px;
+}
+
+#assign-show-content {
+    margin-left: 25px;
+}
+
+#assign-edit-content {
+    margin-left: 25px;
+}
+
+.assignButton {
+    width: 50%;
+}
+
+.row_border{
+    border-color:#000000 #000000;
+    border-width: 1px;
+}
+
+#ontime{
+  color: green;
+}
+
+
+#late{
+   color: red; 
+}
+
+#assignment{
+    text-align:center;
+}
+
+#course_row_color{
+    background:#DCDCDC;
+}
+
+#delete_button{
+   padding-left:10px;
+}
+

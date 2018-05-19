@@ -1,0 +1,62 @@
+
+<h2> NEW ASSIGNMENT </h2>
+
+
+<div class="container">
+  <div id="assign-create-content">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <%= form_for :assignment, url: assignments_path do |f| %>
+         <p>
+            <%= f.label :name %><br>
+            <%= f.text_field :name, id:"name", class: 'form-control', :required => true %>
+          </p>
+          
+          <p>
+            <%= f.label :attachment %>
+            <%= f.file_field :attachment, class:"form-control"%>
+          </p>
+        
+          <p>
+            <%= f.label :course_num %><br>
+            <%= f.collection_select :course_num, @courses.select(:number).distinct, :number, :number,{ id:"course_num", prompt: "Select a Course Number"}, {class: "form-control", :required => true} %>
+            
+            <% if false %> Get course number straight from course page
+              <% if params[:course_num] != nil %>
+                <%= f.text_field :course_num, value: params[:course_num], id:"course_num", class: 'form-control', disabled: true, :required => true%>
+              <% else %>
+                <%= f.collection_select :course_num, @courses, :number, :number,{ id:"course_num", prompt: "Select a Course Number"}, {class: "form-control", :required => true} %>
+              <% end %>
+            <% end %>
+            
+          </p>
+        
+        <p>
+          <%= f.label :due_date %><br>
+          <%= datetime_local_field(:assignment, :due_date, id:"due_date", class: 'form-control') %>
+        </p>
+        
+        
+        <% if false %>
+          we can add a description that the 
+          professor wants to specify late.
+        
+          <p>
+            <%= f.label :text %><br>
+            <%= f.text_area :text %>
+          </p>
+        <% end %> 
+        
+        
+          <p>
+            <%= f.submit 'submit', id:"submit",class: "btn btn-primary" %>
+          </p>
+          <div style="text-align:center;">  
+          <%= link_to 'Back', :back %> &emsp;
+          <%= link_to 'Home', root_path %> 
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

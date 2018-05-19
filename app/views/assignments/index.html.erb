@@ -1,0 +1,120 @@
+<div id="assign-list-content">
+  <div style="text-align:center;">
+    <h1> <b> Assignments </b> </h1> <br>
+  </div>
+  
+  
+   <!-- Form for creating new assignments -->
+  <% if @isInstructor %>
+    <div class="container">
+      <div class="row", style="text-align: center;">
+        <button type="button" class="btn btn-primary assignButton" data-toggle="collapse" data-target="#assign-create-content">Add an Assignment</button>
+      </div>
+      <div id="assign-create-content", class= "collapse">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="form">
+              <%= form_for :assignment, url: assignments_path do |f| %>
+               <p>
+                  <%= f.label :name %><br>
+                  <%= f.text_field :name, id:"name", class: 'form-control', :required => true %>
+                </p>
+                
+                <p>
+                  <%= f.label :attachment %>
+                  <%= f.file_field :attachment, class:"form-control"%>
+                </p>
+              
+                <p>
+                  <%= f.label :course_num %><br>
+                  <%= f.collection_select :course_num, @courses.select(:number).distinct, :number, :number,{ id:"course_num", prompt: "Select a Course Number"}, {class: "form-control", :required => true} %>
+                </p>
+                
+                <p>
+                  <%= f.label :due_date %><br>
+                  <%= datetime_local_field(:assignment, :due_date, id:"due_date", class: 'form-control', :required => true) %>
+                </p>
+              
+                <p>
+                  <%= f.submit 'submit', id:"submit",class: "btn btn-primary" %>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  <% end %>
+  
+   <!-- prints assignments table -->
+  <table class = "sortable" style= "width: 80%;">
+    <thead >
+      <tr>
+        <th>Course</th>
+        <th>Assignment</th>
+        <th>Due Date</th>
+        <th>Time Left</th>
+        <th>Download Instructions</th>
+        <% if @isInstructor %>
+          <th></th>
+          <th style="text-align:left"> Action</th>
+        <% end %>
+      </tr>
+    </thead>
+    
+     <!--Prints all courses -->
+    <% @courses.each do |course| %>
+        <tr id = "course_row_color" >
+            <td class = "row_border" id="course_name_num"><%= course.name + (" ") + course.number.to_s %></td>
+            <td class = "row_border"></td>
+            <td class = "row_border"></td>
+            <td class = "row_border"></td>
+            <td class = "row_border"></td>
+               
+            <% if @isInstructor %>
+               <td class = "row_border"></td>
+               <td class = "row_border"></td>
+            <% end %>
+        </tr>
+        <!--Prints all assignments associated with each existing course -->
+            <% if (@assignments != nil) %>
+              <% course.assignments.each do |assignment| %>
+                   <tr onclick="location.href='<%= assignment_path(assignment) %>'">
+                      <td class = "row_border"></td>
+                      <td class = "row_border"><%= assignment.name %></td>
+                      <td class = "row_border"><%= DateTime.parse(assignment.due_date).strftime("%a, %m/%d/%Y at %I:%M%p") %></td>
+                      
+                      <!-- Checks if the time left hasn't passed yet -->
+                      <% if  (DateTime.parse(assignment.due_date) - DateTime.current) * 24 * 60 * 60 + 5*3600 > 0  %>
+                        <td class = "row_border" id = "ontime"><%= humanize ((DateTime.parse(assignment.due_date) - DateTime.current) * 24 * 60 * 60) + 5*3600 %></td>
+                      <% else %>
+                        <td class = "row_border" id = "late">Submission date passed</td>
+                      <% end %>
+                      
+                      <% if assignment.attachment_url == nil %>
+                        <td class = "row_border" id = "assignment"> <b>N/A</b> </td>
+                      <% else %>
+                      
+                        <td class = "row_border" id = "assignment"><%= link_to "Download", assignment.attachment_url %></td>
+                      <% end %>
+          
+                      <% if @isInstructor %>
+                          <td class = "row_border"><%= button_to "Edit", edit_assignment_path(assignment), method: :get, class: "btn btn-info", data: {confirm: "Are you sure that you wish to edit #{assignment.name}?"} %></td>
+                          <td class = "row_border" id = "delete_button"><%= button_to "Delete",  assignment, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure that you wish to delete #{assignment.name}?"} %></td> 
+                      <% end %>
+                  </tr>
+               <% end %>
+            <% else %>
+               <% puts 'no assignments' %>
+           <% end %>
+        <% end %>
+  </table>
+  
+  <br/> 
+  <div style="text-align:center">
+    <p>  <%= link_to 'Home', root_path %> </p>
+  </div>
+  <br/> 
+
+

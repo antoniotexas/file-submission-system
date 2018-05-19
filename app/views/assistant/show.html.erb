@@ -1,0 +1,22 @@
+<div id="main-content">
+<p> <font size="12">Welcome,  <%= @assistant.first_name %> <%= @assistant.last_name %></font>  </p>
+</div
+
+<div id="instructor-content" >
+    <div class="group">
+      <div class="group-element"><%=link_to courses_path do %>
+        <%= image_tag("Courses.png", class: "png", size: "314x172") %>
+      <% end %>
+      </div>
+      <div class="group-element"><%=link_to assignments_path do %>
+        <%= image_tag("Assignments.png", class: "png", size: "314x172") %>
+      <% end %>
+      </div>
+      <div class="group-element"><%=link_to submissions_path do %>
+        <%= image_tag("Submissions.png", class: "png", size: "314x172") %>
+      <% end %>
+      </div>
+    </div>
+</div>
+
+</div>
